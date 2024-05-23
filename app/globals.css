@@ -16,6 +16,11 @@
   }
 }
 
+.layout {
+  display: grid;
+  grid-template-columns: 5rem auto 1fr;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
