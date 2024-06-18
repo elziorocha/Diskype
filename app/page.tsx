@@ -96,7 +96,7 @@ export default function Home() {
   }, [registerUser, clerkUser]);
 
   if (!homeState) {
-    return <LoadingIndicator/>;
+    return <div className="flex justify-center items-center h-screen"><LoadingIndicator size={50}/></div>;
   }
 
   return <MyChat {...homeState}/>

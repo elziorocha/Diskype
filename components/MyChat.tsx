@@ -12,6 +12,7 @@ import {
 } from 'stream-chat-react';
 
 import 'stream-chat-react/dist/css/v2/index.css';
+import ServerList from './ServerList/ServerList';
 
 export default function MyChat({
     apiKey,
@@ -35,7 +36,7 @@ export default function MyChat({
     return(
         <Chat client={chatClient} theme='str-chat__theme-dark'>
             <section className='flex h-screen w-screen layout'>
-                <div className="bg-blue-500"></div>
+                <ServerList/>
                 <ChannelList />
                 <Channel>
                     <Window>

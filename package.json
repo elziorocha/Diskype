@@ -14,12 +14,14 @@
     "react": "^18",
     "react-dom": "^18",
     "stream-chat": "^8.33.0",
-    "stream-chat-react": "^11.18.1"
+    "stream-chat-react": "^11.18.1",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
