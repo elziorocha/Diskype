@@ -1,16 +1,20 @@
 import { DiskypeServer } from '@/models/DiskypeServer';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 export default function ServerList(): JSX.Element {
+    const [activeServer, setActiveServer] = useState<DiskypeServer | undefined>();
+
     const servers: DiskypeServer[] = [
         {
-            id: uuid(),
+            id: '1',
             name: 'Test Server 1',
             image: 'https://yt3.googleusercontent.com/v-E0zKEhzTKVF46HdajT4pq-o1NTkeyD03VO5QeOGeTySwx0tehIevbkaOLpThYFgyznRkPuYw=s900-c-k-c0x00ffffff-no-rj'
         },
         {
-            id: uuid(),
+            id: '2',
             name: 'Test Server 2',
             image: 'https://steamuserimages-a.akamaihd.net/ugc/2044121906874842494/2602B8BEDC80563B7DCEC6BFCE1F0A1DA7AB33F8/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
         },
@@ -26,9 +30,9 @@ export default function ServerList(): JSX.Element {
             {servers.map((server) => (
                 <button
                     key={server.id}
-                    className='p-2'
-                    onClick={() => console.log(server.name)}
-                    >
+                    className={`my-2 px-1 sidebar-icon ${server.id === activeServer?.id ? 'selected-icon' : ''}`}
+                    onClick={() => setActiveServer(server)}
+                >
                     {server.image && checkIfUrl(server.image)
                         ? (<Image src={server.image} width={50} height={50} className='rounded-icon' alt="Server Icon" />)
                         : (<span className='rounded-icon bg-gray-600 w-[50px] flex items-center justify-center text-sm'>
@@ -36,6 +40,12 @@ export default function ServerList(): JSX.Element {
                         </span>)}
                 </button>
             ))}
+            <Link
+            href={'/?createServer=true'}
+            className='flex items-center justify-center rounded-icon bg-white p-2 my-2 text-2xl font-light size-12
+            text-green-500 hover:bg-green-500 hover:text-white hover:rounded-xl transition-all duration-200'>
+                <span className='inline-block'>+</span>
+            </Link>
         </div>
     )
 
