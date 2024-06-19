@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import CreateServerForm from './CreateServerForm';
 
 export default function ServerList(): JSX.Element {
     const [activeServer, setActiveServer] = useState<DiskypeServer | undefined>();
@@ -42,10 +43,11 @@ export default function ServerList(): JSX.Element {
             ))}
             <Link
             href={'/?createServer=true'}
-            className='flex items-center justify-center rounded-icon bg-white p-2 my-2 text-2xl font-light size-12
+            className='flex items-center justify-center rounded-icon bg-gray-200 p-2 my-2 text-2xl font-semibold size-12
             text-green-500 hover:bg-green-500 hover:text-white hover:rounded-xl transition-all duration-200'>
-                <span className='inline-block'>+</span>
+                <span className='flex items-center justify-center inline-block'>+</span>
             </Link>
+            <CreateServerForm/>
         </div>
     )
 

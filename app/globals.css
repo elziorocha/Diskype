@@ -76,3 +76,25 @@ body {
   --content-width: 0.5rem;
   --offset: -0.15rem;
 }
+
+::backdrop {
+  background: linear-gradient(45deg, #5b6eb3, rgb(102, 51, 153));
+  opacity: 0.4;
+}
+
+.labelTitle {
+  @apply uppercase text-sm font-bold text-gray-600;
+}
+
+input,
+select {
+  @apply w-full p-2 rounded font-semibold text-gray-800;
+}
+
+input[type='text'] {
+  @apply bg-transparent outline-transparent
+}
+
+input[type='text']:focus {
+  outline: none;
+}
