@@ -78,12 +78,12 @@ body {
 }
 
 ::backdrop {
-  background: linear-gradient(45deg, #5b6eb3, rgb(102, 51, 153));
-  opacity: 0.4;
+  background: linear-gradient(45deg, #000000, rgb(44, 43, 43));
+  opacity: 0.6;
 }
 
 .labelTitle {
-  @apply uppercase text-sm font-bold text-gray-600;
+  @apply uppercase text-sm font-bold text-gray-300;
 }
 
 input,
@@ -97,4 +97,32 @@ input[type='text'] {
 
 input[type='text']:focus {
   outline: none;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 23px;
+  height: 23px;
+  border: 2px solid #A422FF;
+  border-radius: 35%;
+  outline: none;
+  cursor: pointer;
+  padding: 1px;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #A422FF;
+  border-color: #A422FF;
+}
+
+input[type="checkbox"]:checked::before {
+  content: '✓';
+  display: flex;
+  justify-content: center;
+  margin-left: 1px;
+  color: white;
+  font-size: 14px;
+  line-height: 15px;
 }

@@ -27,7 +27,7 @@ export default function ServerList(): JSX.Element {
     ];
 
     return (
-        <div className="bg-dark-gray h-full flex flex-col items-center">
+        <div className="bg-[#272a30] h-full flex flex-col items-center border-r-[1px] border-zinc-700">
             {servers.map((server) => (
                 <button
                     key={server.id}

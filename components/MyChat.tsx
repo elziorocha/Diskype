@@ -35,7 +35,7 @@ export default function MyChat({
 
     return(
         <Chat client={chatClient} theme='str-chat__theme-dark'>
-            <section className='flex h-screen w-screen layout'>
+            <section className='flex h-screen layout'>
                 <ServerList/>
                 <ChannelList />
                 <Channel>

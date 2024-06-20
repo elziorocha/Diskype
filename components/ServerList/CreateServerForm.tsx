@@ -1,10 +1,12 @@
 import Link from "next/link";
 import CloseIcon from "../Icons";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { UserObject } from "@/models/UserObject";
 import { useChatContext } from "stream-chat-react";
 import UserRow from "../UserRow";
+import { Router } from "next/router";
+import { useDiskypeContext } from "@/contexts/DiskypeContext";
 
 type FormState = {
     serverName: string;
@@ -14,11 +16,13 @@ type FormState = {
 
 export default function CreateServerForm(): JSX.Element {
 
+    const router = useRouter();
     const params = useSearchParams();
     const showCreateServerForm = params.get('createServer');
     const dialogRef = useRef<HTMLDialogElement>(null);
 
     const { client } = useChatContext();
+    const { createServer } = useDiskypeContext();
     const initialState: FormState = {
         serverName: '',
         serverImage: '',
@@ -30,16 +34,16 @@ export default function CreateServerForm(): JSX.Element {
     const loadUsers = useCallback(async () => {
         const response = await client.queryUsers({});
         const users: UserObject[] = response.users
-        .filter((user) => user.role !== 'admin')
-        .map((user) => {
-            return{
-                id: user.id,
-                name: user.name ?? user.id,
-                image: user.image as string,
-                onLine: user.online,
-                lastOnLine: user.last_active,
-            };
-        });
+            .filter((user) => user.role !== 'admin')
+            .map((user) => {
+                return {
+                    id: user.id,
+                    name: user.name ?? user.id,
+                    image: user.image as string,
+                    onLine: user.online,
+                    lastOnLine: user.last_active,
+                };
+            });
         if (users) setUsers(users);
     }, [client]);
 
@@ -56,35 +60,46 @@ export default function CreateServerForm(): JSX.Element {
     }, [loadUsers]);
 
     return (
-        <dialog className="absolute z-10 space-y-2 rounded-xl" ref={dialogRef}>
+        <dialog className="absolute z-10 space-y-2 rounded-xl bg-zinc-800" ref={dialogRef}>
             <div className="w-full flex items-center justify-between py-8 px-6">
-                <h2 className="text-3xl font-semibold text-gray-600">Create new Server</h2>
-                <Link href='/' className="bg-gray-200 p-1 rounded"><CloseIcon /></Link>
+                <h2 className="text-3xl font-semibold text-gray-300">Create new Server</h2>
+                <Link href='/' className="bg-gray-700 p-1 rounded"><CloseIcon /></Link>
             </div>
-            <form method="dialog" className="flex flex-col space-y-2 px-6">
-                <label htmlFor="serverName" className="labelTitle">
-                    Server Name
-                </label>
-                <div className="flex items-center bg-gray-200 rounded-lg">
-                    <span className="text-2xl py-2 pl-3 text-gray-600 font-bold">#</span>
-                    <input type="text" id="serverName" name="serverName" value={formData.serverName}
-                        onChange={(e) => setFormData({ ...formData, serverName: e.target.value })} required />
+            <form method="dialog" className="flex flex-col space-y-6 px-6">
+                <div className="flex flex-col">
+                    <label htmlFor="serverName" className="labelTitle pb-2">
+                        Server Name
+                    </label>
+                    <div className="flex items-center bg-gray-200 rounded-lg">
+                        <span className="text-2xl py-2 pl-3 text-gray-600 font-bold">#</span>
+                        <input type="text" id="serverName" name="serverName" value={formData.serverName}
+                            onChange={(e) => setFormData({ ...formData, serverName: e.target.value })} required />
+                    </div>
                 </div>
 
-                <label htmlFor="serverImage" className="labelTitle">
-                    Server Image
-                </label>
-                <div className="flex items-center bg-gray-200 rounded-lg">
-                    <span className="text-2xl py-2 pl-3 text-gray-600 font-bold">#</span>
-                    <input type="text" id="serverImage" name="serverImage" value={formData.serverImage}
-                        onChange={(e) => setFormData({ ...formData, serverImage: e.target.value })} required />
+                <div className="flex flex-col">
+                    <label htmlFor="serverImage" className="labelTitle pb-2">
+                        Server Image
+                    </label>
+                    <div className="flex items-center bg-gray-200 rounded-lg">
+                        <span className="text-2xl py-2 pl-3 text-gray-600 font-bold">#</span>
+                        <input type="text" id="serverImage" name="serverImage" value={formData.serverImage}
+                            onChange={(e) => setFormData({ ...formData, serverImage: e.target.value })} required />
+                    </div>
                 </div>
                 <div className="max-h-64 overflow-y-scroll">
+                    <h2 className="labelTitle ml-1">Add Users</h2>
                     {users.map((user) => (
-                        <UserRow key={user.id} user={user} userChanged={userChanged}/>
+                        <UserRow key={user.id} user={user} userChanged={userChanged} />
                     ))}
                 </div>
             </form>
+            <div className="flex space-x-6 items-center justify-between py-6 px-5 bg-gray-700">
+                <Link href={'/'} className="font-semibold text-gray-200 py-2 px-3 bg-red-700 rounded-lg">Cancel</Link>
+                <button type="submit" disabled={buttonDisabled()} onClick={createClicked}
+                    className={`bg-gray-800 rounded-lg py-2 px-4 text-gray-200 font-semibold uppercase
+                ${buttonDisabled() ? 'opacity-40 cursor-not-allowed' : ''}`}>Create Server</button>
+            </div>
         </dialog>
     );
 
@@ -100,5 +115,24 @@ export default function CreateServerForm(): JSX.Element {
                 users: formData.users.filter((thisUser) => thisUser.id !== user.id),
             });
         }
+    };
+
+    function buttonDisabled(): boolean {
+        return (
+            !formData.serverName ||
+            !formData.serverImage ||
+            formData.users.length < 1
+        );
+    };
+
+    function createClicked() {
+        createServer(
+            client,
+            formData.serverName,
+            formData.serverImage,
+            formData.users.map((user) => user.id)
+        );
+        setFormData(initialState);
+        router.replace('/');
     }
-}
+}   
