@@ -51,11 +51,11 @@ export default function ServerList(): JSX.Element {
     return (
         <div className="bg-[#272a30] h-full flex flex-col items-center border-r-[1px] border-zinc-700">
             <button onClick={() => changeServer(undefined, client)}
-                className={`block p-3 aspect-square sidebar-icon border-b-2 border-zinc-900
-                ${activeServer === undefined ? 'selected-icon' : ''}`}
+                className={`block p-3 aspect-square sidebar-icon ${activeServer === undefined ? 'selected-icon' : ''}`}
             >
                 <div className='rounded-icon app-icon'></div>
             </button>
+            <hr className='w-9/12 rounded border-2 border-zinc-900 mb-1'/>
             {serverList.map((server) => (
                 <button
                     key={server.id}
@@ -71,9 +71,9 @@ export default function ServerList(): JSX.Element {
             ))}
             <Link
                 href={'/?createServer=true'}
-                className='flex items-center justify-center rounded-icon bg-gray-200 p-2 my-2 text-2xl font-semibold size-12
-            text-green-500 hover:bg-green-500 hover:text-white hover:rounded-xl transition-all duration-200'>
-                <span className='flex items-center justify-center inline-block'>+</span>
+                className='flex items-center justify-center rounded-icon bg-gray-300 p-2 my-2 text-4xl size-12
+            text-green-500 hover:bg-green-500 hover:text-gray-300 hover:rounded-xl transition-all duration-200'>
+                <span className='flex items-center justify-center inline-block ml-[1px] mb-0.5'>+</span>
             </Link>
             <CreateServerForm />
         </div>
