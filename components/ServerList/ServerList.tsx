@@ -1,38 +1,66 @@
 import { DiskypeServer } from '@/models/DiskypeServer';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import CreateServerForm from './CreateServerForm';
+import { useChatContext } from 'stream-chat-react';
+import { Channel } from 'stream-chat';
+import { useDiskypeContext } from '@/contexts/DiskypeContext';
 
 export default function ServerList(): JSX.Element {
-    const [activeServer, setActiveServer] = useState<DiskypeServer | undefined>();
 
-    const servers: DiskypeServer[] = [
-        {
-            id: '1',
-            name: 'Test Server 1',
-            image: 'https://yt3.googleusercontent.com/v-E0zKEhzTKVF46HdajT4pq-o1NTkeyD03VO5QeOGeTySwx0tehIevbkaOLpThYFgyznRkPuYw=s900-c-k-c0x00ffffff-no-rj'
-        },
-        {
-            id: '2',
-            name: 'Test Server 2',
-            image: 'https://steamuserimages-a.akamaihd.net/ugc/2044121906874842494/2602B8BEDC80563B7DCEC6BFCE1F0A1DA7AB33F8/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
-        },
-        {
-            id: uuid(),
-            name: 'Test Server 3',
-            image: 'https://img.wattpad.com/0d41e713318f8f62d251890799321438036dd6a1/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f776174747061642d6d656469612d736572766963652f53746f7279496d6167652f6367716f554161356263657338513d3d2d3832383039343532302e313565613335346539616437316535313832363937363937303639312e6a7067'
-        },
-    ];
+    const { client } = useChatContext();
+
+    const { server: activeServer, changeServer } = useDiskypeContext();
+
+    const [serverList, setServerList] = useState<DiskypeServer[]>([]);
+
+    const loadServerList = useCallback(async (): Promise<void> => {
+        const channels = await client.queryChannels({
+            type: 'messaging',
+            members: { $in: [client.userID as string] },
+        });
+        const serverSet: Set<DiskypeServer> = new Set(
+            channels
+                .map((channel: Channel) => {
+                    return {
+                        id: channel.data?.data?.id,
+                        name: (channel.data?.data?.server as string) ?? 'Unknown',
+                        image: channel.data?.data?.image,
+                    };
+                })
+                .filter((server: DiskypeServer) => server.name !== 'Unknown')
+                .filter(
+                    (server: DiskypeServer, index, self) => index ===
+                        self.findIndex((serverObject) => serverObject.name == server.name)
+                )
+        );
+        const serverArray = Array.from(serverSet.values());
+        setServerList(serverArray);
+
+        if (serverArray.length > 0) {
+            changeServer(serverArray[0], client);
+        }
+    }, [client, changeServer]);
+
+    useEffect(() => {
+        loadServerList();
+    }, [loadServerList]);
 
     return (
         <div className="bg-[#272a30] h-full flex flex-col items-center border-r-[1px] border-zinc-700">
-            {servers.map((server) => (
+            <button onClick={() => changeServer(undefined, client)}
+                className={`block p-3 aspect-square sidebar-icon border-b-2 border-zinc-900
+                ${activeServer === undefined ? 'selected-icon' : ''}`}
+            >
+                <div className='rounded-icon app-icon'></div>
+            </button>
+            {serverList.map((server) => (
                 <button
                     key={server.id}
                     className={`my-2 px-1 sidebar-icon ${server.id === activeServer?.id ? 'selected-icon' : ''}`}
-                    onClick={() => setActiveServer(server)}
+                    onClick={() => changeServer(server, client)}
                 >
                     {server.image && checkIfUrl(server.image)
                         ? (<Image src={server.image} width={50} height={50} className='rounded-icon' alt="Server Icon" />)
@@ -42,12 +70,12 @@ export default function ServerList(): JSX.Element {
                 </button>
             ))}
             <Link
-            href={'/?createServer=true'}
-            className='flex items-center justify-center rounded-icon bg-gray-200 p-2 my-2 text-2xl font-semibold size-12
+                href={'/?createServer=true'}
+                className='flex items-center justify-center rounded-icon bg-gray-200 p-2 my-2 text-2xl font-semibold size-12
             text-green-500 hover:bg-green-500 hover:text-white hover:rounded-xl transition-all duration-200'>
                 <span className='flex items-center justify-center inline-block'>+</span>
             </Link>
-            <CreateServerForm/>
+            <CreateServerForm />
         </div>
     )
 

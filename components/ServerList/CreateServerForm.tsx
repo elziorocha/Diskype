@@ -28,6 +28,7 @@ export default function CreateServerForm(): JSX.Element {
         serverImage: '',
         users: [],
     };
+
     const [formData, setFormData] = useState<FormState>(initialState);
     const [users, setUsers] = useState<UserObject[]>([]);
 
@@ -63,11 +64,11 @@ export default function CreateServerForm(): JSX.Element {
         <dialog className="absolute z-10 space-y-2 rounded-xl bg-zinc-800" ref={dialogRef}>
             <div className="w-full flex items-center justify-between py-8 px-6">
                 <h2 className="text-3xl font-semibold text-gray-300">Create new Server</h2>
-                <Link href='/' className="bg-gray-700 p-1 rounded"><CloseIcon /></Link>
+                <Link href='/' className="bg-gray-700 p-1.5 rounded hover:bg-gray-600"><CloseIcon /></Link>
             </div>
             <form method="dialog" className="flex flex-col space-y-6 px-6">
                 <div className="flex flex-col">
-                    <label htmlFor="serverName" className="labelTitle pb-2">
+                    <label htmlFor="serverName" className="labelTitle pb-2 ml-1">
                         Server Name
                     </label>
                     <div className="flex items-center bg-gray-200 rounded-lg">
@@ -78,7 +79,7 @@ export default function CreateServerForm(): JSX.Element {
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="serverImage" className="labelTitle pb-2">
+                    <label htmlFor="serverImage" className="labelTitle pb-2 ml-1">
                         Server Image
                     </label>
                     <div className="flex items-center bg-gray-200 rounded-lg">

@@ -1,10 +1,13 @@
 'use client';
 
+import { DiskypeServer } from '@/models/DiskypeServer';
 import { createContext, useCallback, useContext, useState } from 'react';
 import { StreamChat } from 'stream-chat';
 import { v4 as uuid } from 'uuid';
 
 type DiskypeState = {
+    server?: DiskypeServer;
+    changeServer: (server: DiskypeServer | undefined, client: StreamChat) => void;
     createServer: (
         client: StreamChat,
         name: string,
@@ -14,7 +17,9 @@ type DiskypeState = {
 };
 
 const initialValue: DiskypeState = {
-    createServer:() => {}
+    server: undefined,
+    changeServer:() => {},
+    createServer:() => {},
 };
 
 const DiskypeContext = createContext<DiskypeState>(initialValue);
@@ -25,6 +30,15 @@ export const DiskypeContextProvider: any = ({
     children: React.ReactNode;
 }) => {
     const [myState, setMyState] = useState<DiskypeState>(initialValue);
+
+    const changeServer = useCallback(
+        async (server: DiskypeServer | undefined, client: StreamChat) => {
+            setMyState((myState) => {
+                return {...myState, server};
+            });
+        },
+        [setMyState]
+    );
 
     const createServer = useCallback(
         async (
@@ -55,6 +69,8 @@ export const DiskypeContextProvider: any = ({
     );
 
     const store: DiskypeState = {
+        server: myState.server,
+        changeServer: changeServer,
         createServer: createServer,
     };
 

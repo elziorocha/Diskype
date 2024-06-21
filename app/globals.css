@@ -37,6 +37,17 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+::-webkit-scrollbar {
+  background-color: #171718;
+  width: 12px;
+  border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 30px;
+  background-color: #A422FF
+}
+
 .rounded-icon {
   @apply transition-all ease-in-out duration-200 aspect-square object-cover;
   border-radius: 50%;
@@ -97,6 +108,23 @@ input[type='text'] {
 
 input[type='text']:focus {
   outline: none;
+}
+
+dialog {
+  width: clamp(30rem, 50%, 5rem);
+}
+
+.app-icon {
+  @apply bg-gray-700 p-3 w-full h-full;
+  content: '';
+
+  background: url('../assets/mensagens.svg') no-repeat center center, #a1a1aa;
+  background-origin: content-box;
+}
+
+.app-icon:hover {
+  background-origin: content-box;
+  --offset: 1.5rem;
 }
 
 input[type="checkbox"] {

@@ -30,20 +30,24 @@ export default function MyChat({
     });
 
     if (!chatClient) {
-        return <div>Error, please try again later.</div>
+        return (
+            <div className='flex justify-center items-center h-screen text-bold text-2xl'>
+                Error, please try again later.
+            </div>
+        )
     }
 
-    return(
+    return (
         <Chat client={chatClient} theme='str-chat__theme-dark'>
             <section className='flex h-screen layout'>
-                <ServerList/>
+                <ServerList />
                 <ChannelList />
                 <Channel>
                     <Window>
-                        <MessageList/>
+                        <MessageList />
                         <MessageInput />
                     </Window>
-                    <Thread/>
+                    <Thread />
                 </Channel>
             </section>
         </Chat>
