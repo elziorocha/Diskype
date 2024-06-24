@@ -132,6 +132,8 @@ export const DiskypeContextProvider: any = ({
                     name: name,
                     members: userIds,
                     data: {
+                        image: myState.server?.image,
+                        serverId: myState.server?.id,
                         server: myState.server?.name,
                         category: category,
                     },
@@ -144,7 +146,7 @@ export const DiskypeContextProvider: any = ({
                 }
             }
         },
-        [myState.server?.name]
+        [myState.server]
     );
 
 
