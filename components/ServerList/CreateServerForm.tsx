@@ -122,7 +122,7 @@ export default function CreateServerForm(): JSX.Element {
         return (
             !formData.serverName ||
             !formData.serverImage ||
-            formData.users.length < 1
+            formData.users.length <= 1
         );
     };
 

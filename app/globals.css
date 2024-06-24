@@ -88,6 +88,10 @@ body {
   --offset: -0.15rem;
 }
 
+.selected-icon .rounded-icon {
+  border-radius: 0.75rem;
+}
+
 .selected-icon:hover::before {
   --content-height: 2rem;
   --content-width: 0.55rem;

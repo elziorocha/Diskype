@@ -16,6 +16,12 @@ type DiskypeState = {
         imageUrl: string,
         userIds: string[]
     ) => void;
+    createChannel: (
+        client: StreamChat,
+        name: string,
+        category: string,
+        userIds: string[]
+    ) => void;
 };
 
 const initialValue: DiskypeState = {
@@ -23,6 +29,7 @@ const initialValue: DiskypeState = {
     channelsByCategories: new Map(),
     changeServer: () => { },
     createServer: () => { },
+    createChannel: () => { },
 };
 
 const DiskypeContext = createContext<DiskypeState>(initialValue);
@@ -43,19 +50,27 @@ export const DiskypeContextProvider: any = ({
             if (!server) {
                 filters.member_count = 2;
             }
-            
+
+            console.log(
+                '[DiscordContext - loadServerList] Querying channels for ',
+                client.userID
+            );
             const channels = await client.queryChannels(filters);
             const channelsByCategories = new Map<
                 string,
                 Array<Channel<DefaultStreamChatGenerics>>
             >();
-
             if (server) {
-                const categories = new Set(channels.filter((channel) => {
-                    return channel.data?.data?.server === server.name;
-                }).map((channel) => {
-                    return channel.data?.data?.category;
-                }))
+                const categories = new Set(
+                    channels
+                        .filter((channel) => {
+                            return channel.data?.data?.server === server.name;
+                        })
+                        .map((channel) => {
+                            return channel.data?.data?.category;
+                        })
+                );
+
                 for (const category of Array.from(categories)) {
                     channelsByCategories.set(
                         category,
@@ -63,9 +78,9 @@ export const DiskypeContextProvider: any = ({
                             return (
                                 channel.data?.data?.server === server.name &&
                                 channel.data?.data?.category === category
-                            )
+                            );
                         })
-                    )
+                    );
                 }
             } else {
                 channelsByCategories.set('Direct Messages', channels);
@@ -105,11 +120,40 @@ export const DiskypeContextProvider: any = ({
         []
     );
 
+    const createChannel = useCallback(
+        async (
+            client: StreamChat,
+            name: string,
+            category: string,
+            userIds: string[]
+        ) => {
+            if (client.userID) {
+                const channel = client.channel('messaging', uuid(), {
+                    name: name,
+                    members: userIds,
+                    data: {
+                        server: myState.server?.name,
+                        category: category,
+                    },
+                });
+                try {
+                    const response = await channel.create();
+                    console.log('[DiskypeContext - createChannel] Response: ', response);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        },
+        [myState.server?.name]
+    );
+
+
     const store: DiskypeState = {
         server: myState.server,
         channelsByCategories: myState.channelsByCategories,
         changeServer: changeServer,
         createServer: createServer,
+        createChannel: createChannel,
     };
 
     return (

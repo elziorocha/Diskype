@@ -2,6 +2,7 @@ import { useDiskypeContext } from "@/contexts/DiskypeContext"
 import ChannelListTopBar from "./TopBar/ChannelListTopBar";
 import CategoryItem from "./CategoryItem";
 import ChannelListBottomBar from "./BottomBar/ChannelListBottomBar";
+import CreateChannelForm from "./CreateChannelForm/CreateChannelForm";
 
 export default function CustomChannelList(): JSX.Element {
 
@@ -22,7 +23,8 @@ export default function CustomChannelList(): JSX.Element {
                         channels={channelsByCategories.get(category) || []} />
                 ))}
             </div>
-
+                
+            <CreateChannelForm />
             <ChannelListBottomBar />
         </div>
     )

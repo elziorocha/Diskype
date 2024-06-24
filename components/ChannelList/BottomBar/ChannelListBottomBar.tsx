@@ -17,7 +17,7 @@ export default function ChannelListBottomBar(): JSX.Element {
     return (
         <div className="mt-auto p-2 bg-zinc-800 w-full flex items-center space-x-3 relative">
             <button onClick={() => setMenuOpen((currentValue) => !currentValue)}
-                className="flex flex-1 items-center space-x-2 p-1 pr-2 rounded-md hover:bg-zinc-900">
+                className="flex flex-1 items-center space-x-2 p-1 pr-1 rounded-md hover:bg-zinc-900">
                 {client.user?.image && (
                     <div className={`relative ${client.user?.online ? 'online-icon' : ''}`}>
                         <Image
@@ -31,11 +31,11 @@ export default function ChannelListBottomBar(): JSX.Element {
                 )}
 
                 <p className="flex flex-col py-0.5 items-start space-y-1">
-                    <span className='mr-1 block max-w-24 text-gray-200 text-base font-medium -mb-1.5
+                    <span className='mr-1 block max-w-24 text-gray-200 text-sm font-medium -mb-1.5
                     tracking-tight text-ellipsis overflow-x-clip'>
                         {client.user?.name}
                     </span>
-                    <span className='mr-1 text-sm text-gray-200 inline-block'>
+                    <span className='mr-1 text-xs text-gray-200 inline-block'>
                         {client.user?.online ? 'Online' : 'Offline'}
                     </span>
                 </p>
