@@ -1,13 +1,26 @@
 import { useDiskypeContext } from "@/contexts/DiskypeContext"
 import ChannelListTopBar from "./TopBar/ChannelListTopBar";
+import CategoryItem from "./CategoryItem";
 
 export default function CustomChannelList(): JSX.Element {
 
-    const { server } = useDiskypeContext();
+    const { server, channelsByCategories } = useDiskypeContext();
+    
+    const isDirectMessages = !server;
 
-    return(
+    return (
         <div className="w-72 bg-zinc-900 h-full flex flex-col items-start">
-            <ChannelListTopBar serverName={server?.name || 'Direct Messages'}/>
+            <ChannelListTopBar serverName={server?.name || 'Direct Messages'} />
+
+            <div className="w-full">
+                {!isDirectMessages && Array.from(channelsByCategories.keys()).map((category, index) => (
+                    <CategoryItem
+                        key={`${category}-${index}`}
+                        category={category} 
+                        serverName={server?.name || 'Direct Messages'}
+                        channels={channelsByCategories.get(category) || []}/>
+                ))}
+            </div>
         </div>
     )
 }
