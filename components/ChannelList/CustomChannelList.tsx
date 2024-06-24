@@ -1,11 +1,12 @@
 import { useDiskypeContext } from "@/contexts/DiskypeContext"
 import ChannelListTopBar from "./TopBar/ChannelListTopBar";
 import CategoryItem from "./CategoryItem";
+import ChannelListBottomBar from "./BottomBar/ChannelListBottomBar";
 
 export default function CustomChannelList(): JSX.Element {
 
     const { server, channelsByCategories } = useDiskypeContext();
-    
+
     const isDirectMessages = !server;
 
     return (
@@ -16,11 +17,13 @@ export default function CustomChannelList(): JSX.Element {
                 {!isDirectMessages && Array.from(channelsByCategories.keys()).map((category, index) => (
                     <CategoryItem
                         key={`${category}-${index}`}
-                        category={category} 
+                        category={category}
                         serverName={server?.name || 'Direct Messages'}
-                        channels={channelsByCategories.get(category) || []}/>
+                        channels={channelsByCategories.get(category) || []} />
                 ))}
             </div>
+
+            <ChannelListBottomBar />
         </div>
     )
 }

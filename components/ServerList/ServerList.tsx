@@ -55,12 +55,12 @@ export default function ServerList(): JSX.Element {
             >
                 <div className='rounded-icon app-icon'></div>
             </button>
-            <hr className='w-9/12 rounded border-2 border-zinc-900 mb-1'/>
+            <hr className='w-9/12 rounded border-2 border-zinc-900 mb-1' />
             {serverList.map((server) => (
                 <button
                     key={server.id}
-                    className={`my-2 px-1 sidebar-icon ${server.id === activeServer?.id ? 'selected-icon' : ''}`}
                     onClick={() => changeServer(server, client)}
+                    className={`my-2 px-1 sidebar-icon ${server === activeServer ? 'selected-icon' : ''}`}
                 >
                     {server.image && checkIfUrl(server.image)
                         ? (<Image src={server.image} width={50} height={50} className='rounded-icon' alt="Server Icon" />)

@@ -17,6 +17,7 @@ export default function ChannelListTopBar({
             ${menuOpen ? 'bg-zinc-800' : ''} border-gray-800 hover:bg-zinc-800`}
             >
                 <h2 className="text-lg font-bold text-gray-200 tracking-wide">{serverName}</h2>
+
                 {menuOpen && <CloseIcon />}
                 {!menuOpen && <ChevronDown />}
             </button>
