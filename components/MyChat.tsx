@@ -1,4 +1,5 @@
 import { useClient } from '@/hooks/useClient';
+import { useVideoClient } from '@/hooks/useVideoClient';
 import { User } from 'stream-chat';
 import {
     Chat,
@@ -18,6 +19,7 @@ import CustomDateSeparator from './MessageList/CustomDateSeparator/CustomDateSep
 import CustomChannelHeader from './MessageList/CustomChannelHeader/CustomChannelHeader';
 import CustomMessage from './MessageList/CustomMessage/CustomMessage';
 import MessageComposer from './MessageList/MessageComposer/MessageComposer';
+import { StreamVideo } from '@stream-io/video-react-sdk';
 
 export default function MyChat({
     apiKey,
@@ -33,6 +35,11 @@ export default function MyChat({
         user,
         tokenOrProvider: token,
     });
+    const videoClient = useVideoClient({
+        apiKey,
+        user,
+        tokenOrProvider: token,
+    });
 
     if (!chatClient) {
         return (
@@ -41,21 +48,30 @@ export default function MyChat({
             </div>
         )
     }
+    if (!videoClient) {
+        return (
+            <div className=''>
+                Video Error, please try again later.
+            </div>
+        )
+    }
 
     return (
-        <Chat client={chatClient} theme='str-chat__theme-dark'>
-            <section className='flex h-screen layout'>
-                <ServerList />
-                <ChannelList List={CustomChannelList}/>
-                <Channel DateSeparator={CustomDateSeparator} HeaderComponent={CustomChannelHeader}
-                Message={CustomMessage} Input={MessageComposer}>
-                    <Window>
-                        <MessageList />
-                        <MessageInput />
-                    </Window>
-                    <Thread />
-                </Channel>
-            </section>
-        </Chat>
+        <StreamVideo client={videoClient}>
+            <Chat client={chatClient} theme='str-chat__theme-dark'>
+                <section className='flex h-screen layout'>
+                    <ServerList />
+                    <ChannelList List={CustomChannelList} />
+                    <Channel DateSeparator={CustomDateSeparator} HeaderComponent={CustomChannelHeader}
+                        Message={CustomMessage} Input={MessageComposer}>
+                        <Window>
+                            <MessageList />
+                            <MessageInput />
+                        </Window>
+                        <Thread />
+                    </Channel>
+                </section>
+            </Chat>
+        </StreamVideo>
     )
 }

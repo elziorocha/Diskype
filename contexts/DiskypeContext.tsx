@@ -1,6 +1,7 @@
 'use client';
 
 import { DiskypeServer } from '@/models/DiskypeServer';
+import { MemberRequest, StreamVideoClient } from '@stream-io/video-react-sdk';
 import { createContext, useCallback, useContext, useState } from 'react';
 import { Channel, ChannelFilters, StreamChat } from 'stream-chat';
 import { DefaultStreamChatGenerics } from 'stream-chat-react';
@@ -8,10 +9,12 @@ import { v4 as uuid } from 'uuid';
 
 type DiskypeState = {
     server?: DiskypeServer;
+    callId: string | undefined,
     channelsByCategories: Map<string, Array<Channel<DefaultStreamChatGenerics>>>;
     changeServer: (server: DiskypeServer | undefined, client: StreamChat) => void;
     createServer: (
         client: StreamChat,
+        videoClient: StreamVideoClient,
         name: string,
         imageUrl: string,
         userIds: string[]
@@ -22,14 +25,24 @@ type DiskypeState = {
         category: string,
         userIds: string[]
     ) => void;
+    createCall: (
+        client: StreamVideoClient,
+        server: DiskypeServer,
+        channelName: string,
+        userIds: string[],
+    ) => Promise<void>;
+    setCall: (callId: string | undefined) => void;
 };
 
 const initialValue: DiskypeState = {
     server: undefined,
+    callId: undefined,
     channelsByCategories: new Map(),
     changeServer: () => { },
     createServer: () => { },
     createChannel: () => { },
+    createCall: async () => { },
+    setCall: () => { },
 };
 
 const DiskypeContext = createContext<DiskypeState>(initialValue);
@@ -92,9 +105,45 @@ export const DiskypeContextProvider: any = ({
         [setMyState]
     );
 
+    const createCall = useCallback(
+        async (
+            client: StreamVideoClient,
+            server: DiskypeServer,
+            channelName: string,
+            userIds: string[]
+        ) => {
+            const callId = uuid()
+            const audioCall = client.call('default', callId);
+            const audioChannelMembers: MemberRequest[] = userIds.map((userId) => {
+                return {
+                    user_id: userId,
+                };
+            });
+            try {
+                const createdAudioCall = await audioCall.create({
+                    data: {
+                        custom: {
+                            serverId: server?.id,
+                            serverName: server?.name,
+                            callName: channelName,
+                        },
+                        members: audioChannelMembers,
+                    },
+                });
+                console.log(
+                    `[DiskypeContext] Created Call with id: ${createdAudioCall.call.id}`
+                );
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        []
+    );
+
     const createServer = useCallback(
         async (
             client: StreamChat,
+            videoClient: StreamVideoClient,
             name: string,
             imageUrl: string,
             userIds: string[]
@@ -113,11 +162,19 @@ export const DiskypeContextProvider: any = ({
             try {
                 const response = await messagingChannel.create();
                 console.log('[DiskypeContext - createServer] Response: ', response);
+                if (myState.server) {
+                    await createCall(
+                        videoClient,
+                        myState.server,
+                        'General Voice Channel',
+                        userIds
+                    );
+                }
             } catch (err) {
                 console.log(err);
             }
         },
-        []
+        [createCall, myState.server]
     );
 
     const createChannel = useCallback(
@@ -149,13 +206,24 @@ export const DiskypeContextProvider: any = ({
         [myState.server]
     );
 
+    const setCall = useCallback(
+        (callId: string | undefined) => {
+            setMyState((myState) => {
+                return { ...myState, callId };
+            });
+        },
+        [setMyState]
+    );
 
     const store: DiskypeState = {
         server: myState.server,
+        callId: myState.callId,
         channelsByCategories: myState.channelsByCategories,
         changeServer: changeServer,
         createServer: createServer,
         createChannel: createChannel,
+        createCall: createCall,
+        setCall: setCall,
     };
 
     return (

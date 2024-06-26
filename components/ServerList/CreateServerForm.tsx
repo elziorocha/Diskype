@@ -7,6 +7,7 @@ import { useChatContext } from "stream-chat-react";
 import UserRow from "../UserRow";
 import { Router } from "next/router";
 import { useDiskypeContext } from "@/contexts/DiskypeContext";
+import { useStreamVideoClient } from "@stream-io/video-react-sdk";
 
 type FormState = {
     serverName: string;
@@ -22,6 +23,7 @@ export default function CreateServerForm(): JSX.Element {
     const dialogRef = useRef<HTMLDialogElement>(null);
 
     const { client } = useChatContext();
+    const videoClient = useStreamVideoClient();
     const { createServer } = useDiskypeContext();
     const initialState: FormState = {
         serverName: '',
@@ -127,8 +129,14 @@ export default function CreateServerForm(): JSX.Element {
     };
 
     function createClicked() {
+        if (!videoClient) {
+            console.log('[CreateServerForm] Video client not available');
+            return;
+        }
+        
         createServer(
             client,
+            videoClient,
             formData.serverName,
             formData.serverImage,
             formData.users.map((user) => user.id)
