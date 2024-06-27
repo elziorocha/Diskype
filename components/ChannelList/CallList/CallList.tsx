@@ -29,6 +29,10 @@ export default function CallList(): JSX.Element {
         loadAudioChannels();
     }, [loadAudioChannels]);
 
+    if (!server) {
+        return <></>;
+    }
+
     return (
         <div className="w-full my-2">
             <div className="flex text-gray-200 items-center mb-2 pr-2">
@@ -47,7 +51,7 @@ export default function CallList(): JSX.Element {
                 <div className="px-2">
                     {calls.map((call) => (
                         <button key={call.id}
-                            className='w-full flex items-center my-1 px-2 py-1.5 hover:bg-zinc-800 rounded-md'
+                            className='ml-6 w-[15.35rem] flex items-center my-1 px-2 py-1.5 hover:bg-zinc-800 rounded-md'
                             onClick={() => {
                                 setCall(call.id);
                             }}>

@@ -13,7 +13,7 @@ export default function CustomChannelList(): JSX.Element {
 
     return (
         <div className="w-72 bg-zinc-900 h-full flex flex-col items-start">
-            <ChannelListTopBar serverName={server?.name || 'Direct Messages'} />
+            <ChannelListTopBar serverName={server?.name || 'Direct Messages'} serverImage={server?.image}/>
 
             <div className="w-full">
                 {!isDirectMessages && Array.from(channelsByCategories.keys()).map((category, index) => (

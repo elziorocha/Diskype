@@ -12,7 +12,7 @@ export default function ChannelListBottomBar(): JSX.Element {
     const [audioActive, setAudioActive] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const { signOut } = useClerk();
+    const { signOut, user } = useClerk();
 
     return (
         <div className="mt-auto p-2 bg-zinc-800 w-full flex items-center space-x-3 relative">
@@ -33,7 +33,7 @@ export default function ChannelListBottomBar(): JSX.Element {
                 <p className="flex flex-col py-0.5 items-start space-y-1">
                     <span className='mr-1 block max-w-24 text-gray-200 text-sm font-medium -mb-1.5
                     tracking-tight text-ellipsis overflow-x-clip'>
-                        {client.user?.name}
+                        {user?.username || client.user?.name}
                     </span>
                     <span className='mr-1 text-xs text-gray-200 inline-block'>
                         {client.user?.online ? 'Online' : 'Offline'}

@@ -12,7 +12,7 @@ export default function CallLayout(): JSX.Element {
 
     if (callingState !== CallingState.JOINED) {
         return (
-            <div>Loading...</div>
+            <div className='flex items-center justify-center'>Loading...</div>
         )
     }
 

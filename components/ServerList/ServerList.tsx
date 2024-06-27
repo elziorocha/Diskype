@@ -63,7 +63,7 @@ export default function ServerList(): JSX.Element {
                     className={`my-2 px-1 sidebar-icon ${server === activeServer ? 'selected-icon' : ''}`}
                 >
                     {server.image && checkIfUrl(server.image)
-                        ? (<Image src={server.image} width={50} height={50} className='rounded-icon' alt="Server Icon" />)
+                        ? (<Image src={server.image} width={100} height={100} className='rounded-icon' alt="Server Icon" />)
                         : (<span className='rounded-icon bg-gray-600 w-[50px] flex items-center justify-center text-sm'>
                             {server.name.charAt(0)}
                         </span>)}
@@ -73,7 +73,7 @@ export default function ServerList(): JSX.Element {
                 href={'/?createServer=true'}
                 className='flex items-center justify-center rounded-icon bg-gray-300 p-2 my-2 text-4xl size-12
             text-green-500 hover:bg-green-500 hover:text-gray-300 hover:rounded-xl transition-all duration-200'>
-                <span className='flex items-center justify-center inline-block ml-[1px] mb-0.5'>+</span>
+                <span className='flex items-center justify-center ml-[1px] mb-0.5'>+</span>
             </Link>
             <CreateServerForm />
         </div>
