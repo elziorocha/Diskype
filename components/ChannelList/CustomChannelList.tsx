@@ -3,6 +3,7 @@ import ChannelListTopBar from "./TopBar/ChannelListTopBar";
 import CategoryItem from "./CategoryItem";
 import ChannelListBottomBar from "./BottomBar/ChannelListBottomBar";
 import CreateChannelForm from "./CreateChannelForm/CreateChannelForm";
+import CallList from "./CallList/CallList";
 
 export default function CustomChannelList(): JSX.Element {
 
@@ -24,6 +25,7 @@ export default function CustomChannelList(): JSX.Element {
                 ))}
             </div>
                 
+            <CallList/>
             <CreateChannelForm />
             <ChannelListBottomBar />
         </div>
