@@ -97,11 +97,14 @@ export default function CreateServerForm(): JSX.Element {
                     ))}
                 </div>
             </form>
-            <div className="flex space-x-6 items-center justify-between py-6 px-5 bg-gray-700">
-                <Link href={'/'} className="font-semibold text-gray-200 py-2 px-3 bg-red-700 rounded-lg">Cancel</Link>
-                <button type="submit" disabled={buttonDisabled()} onClick={createClicked}
+            <div className="flex flex-col py-4 px-6 bg-gray-700">
+            <p className="text-red-600 font-medium self-end text-sm">{`It's necessary to restart the page`}</p>
+                <div className="flex justify-between mt-1">
+                    <Link href={'/'} className="font-semibold text-gray-200 py-2 px-3 bg-red-700 rounded-lg">Cancel</Link>
+                    <button type="submit" disabled={buttonDisabled()} onClick={createClicked}
                     className={`bg-gray-800 rounded-lg py-2 px-4 text-gray-200 font-semibold uppercase
-                ${buttonDisabled() ? 'opacity-40 cursor-not-allowed' : ''}`}>Create Server</button>
+                    ${buttonDisabled() ? 'opacity-40 cursor-not-allowed' : ''}`}>Create Server</button>
+                </div>
             </div>
         </dialog>
     );
@@ -133,7 +136,7 @@ export default function CreateServerForm(): JSX.Element {
             console.log('[CreateServerForm] Video client not available');
             return;
         }
-        
+
         createServer(
             client,
             videoClient,

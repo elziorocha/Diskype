@@ -120,6 +120,11 @@ input[type='text']:focus {
   outline: none;
 }
 
+input[type='radio'] {
+  @apply size-8 mb-0;
+  accent-color: #A422FF;
+}
+
 dialog {
   width: clamp(30rem, 50%, 5rem);
 }
