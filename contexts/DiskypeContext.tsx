@@ -162,19 +162,22 @@ export const DiskypeContextProvider: any = ({
             try {
                 const response = await messagingChannel.create();
                 console.log('[DiskypeContext - createServer] Response: ', response);
-                if (myState.server) {
+                const server: DiskypeServer = {
+                    id: serverId,
+                    name: name,
+                    image: imageUrl,
+                };
                     await createCall(
                         videoClient,
-                        myState.server,
+                        server,
                         'General Voice Channel',
                         userIds
                     );
-                }
             } catch (err) {
                 console.log(err);
             }
         },
-        [createCall, myState.server]
+        [createCall]
     );
 
     const createChannel = useCallback(

@@ -20,6 +20,8 @@ import CustomChannelHeader from './MessageList/CustomChannelHeader/CustomChannel
 import CustomMessage from './MessageList/CustomMessage/CustomMessage';
 import MessageComposer from './MessageList/MessageComposer/MessageComposer';
 import { StreamVideo } from '@stream-io/video-react-sdk';
+import { useDiskypeContext } from '@/contexts/DiskypeContext';
+import MyCall from './MyCall/MyCall';
 
 export default function MyChat({
     apiKey,
@@ -40,6 +42,7 @@ export default function MyChat({
         user,
         tokenOrProvider: token,
     });
+    const { callId } = useDiskypeContext();
 
     if (!chatClient) {
         return (
@@ -62,6 +65,8 @@ export default function MyChat({
                 <section className='flex h-screen layout'>
                     <ServerList />
                     <ChannelList List={CustomChannelList} />
+                    {callId && <MyCall callId={callId}/>}
+                    {!callId && (
                     <Channel DateSeparator={CustomDateSeparator} HeaderComponent={CustomChannelHeader}
                         Message={CustomMessage} Input={MessageComposer}>
                         <Window>
@@ -70,6 +75,7 @@ export default function MyChat({
                         </Window>
                         <Thread />
                     </Channel>
+                    )}
                 </section>
             </Chat>
         </StreamVideo>

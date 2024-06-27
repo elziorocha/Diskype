@@ -34,7 +34,7 @@ export default function CallList(): JSX.Element {
             <div className="flex text-gray-200 items-center mb-2 pr-2">
                 <button onClick={() => setIsOpen((currentValue) => !currentValue)}
                     className="flex w-full items-center justify-start px-2">
-                    <div className={`${isOpen ? '-rotate-90' : ''} transition-all ease-in-out duration-200`}>
+                    <div className={`${isOpen ? '' : '-rotate-90'} transition-all ease-in-out duration-200`}>
                         <ChevronDown />
                     </div>
                     <h2 className="inline-block uppercase text-sm font-bold px-2">Voice Channels</h2>
@@ -47,7 +47,7 @@ export default function CallList(): JSX.Element {
                 <div className="px-2">
                     {calls.map((call) => (
                         <button key={call.id}
-                            className='w-full flex items-center my-1 px-2 py-1 hover:bg-gray-200 rounded-md'
+                            className='w-full flex items-center my-1 px-2 py-1.5 hover:bg-zinc-800 rounded-md'
                             onClick={() => {
                                 setCall(call.id);
                             }}>
