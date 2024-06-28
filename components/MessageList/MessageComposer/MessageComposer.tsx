@@ -49,7 +49,7 @@ export default function MessageComposer(): JSX.Element {
                 </div>
             )}
             <input
-                className='border-transparent bg-transparent outline-none text-sm font-semibold m-0 text-gray-200'
+                className='border-transparent bg-transparent outline-none text-sm font-semibold m-0 text-gray-300'
                 type='text'
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
