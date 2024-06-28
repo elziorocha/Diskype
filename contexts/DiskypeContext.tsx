@@ -54,6 +54,20 @@ export const DiskypeContextProvider: any = ({
 }) => {
     const [myState, setMyState] = useState<DiskypeState>(initialValue);
 
+    interface ChannelData {
+        server?: string;
+        category?: string;
+    }
+    
+    interface CustomData {
+        custom?: {
+            serverId?: string;
+            serverName?: string;
+            callName?: string;
+        };
+        members: MemberRequest[];
+    }
+
     const changeServer = useCallback(
         async (server: DiskypeServer | undefined, client: StreamChat) => {
             let filters: ChannelFilters = {
@@ -63,7 +77,7 @@ export const DiskypeContextProvider: any = ({
             if (!server) {
                 filters.member_count = 2;
             }
-
+    
             console.log(
                 '[DiscordContext - loadServerList] Querying channels for ',
                 client.userID
@@ -74,23 +88,23 @@ export const DiskypeContextProvider: any = ({
                 Array<Channel<DefaultStreamChatGenerics>>
             >();
             if (server) {
-                const categories = new Set(
-                    channels
-                        .filter((channel) => {
-                            return channel.data?.data?.server === server.name;
-                        })
-                        .map((channel) => {
-                            return channel.data?.data?.category;
-                        })
-                );
-
+                const categories = new Set<string>();
+    
+                channels.forEach((channel) => {
+                    const channelData = channel.data?.data as ChannelData;
+                    if (channelData.server === server.name) {
+                        categories.add(channelData.category || 'Uncategorized');
+                    }
+                });
+    
                 for (const category of Array.from(categories)) {
                     channelsByCategories.set(
                         category,
                         channels.filter((channel) => {
+                            const channelData = channel.data?.data as ChannelData;
                             return (
-                                channel.data?.data?.server === server.name &&
-                                channel.data?.data?.category === category
+                                channelData.server === server.name &&
+                                channelData.category === category
                             );
                         })
                     );
@@ -98,9 +112,11 @@ export const DiskypeContextProvider: any = ({
             } else {
                 channelsByCategories.set('Direct Messages', channels);
             }
-            setMyState((myState) => {
-                return { ...myState, server, channelsByCategories };
-            });
+            setMyState((myState) => ({
+                ...myState,
+                server,
+                channelsByCategories,
+            }));
         },
         [setMyState]
     );
