@@ -21,21 +21,24 @@ export default function ServerList(): JSX.Element {
             type: 'messaging',
             members: { $in: [client.userID as string] },
         });
+
         const serverSet: Set<DiskypeServer> = new Set(
             channels
                 .map((channel: Channel) => {
+                    const channelData = channel.data?.data as { id: string, server: string, image?: string };
                     return {
-                        id: channel.data?.data?.id,
-                        name: (channel.data?.data?.server as string) ?? 'Unknown',
-                        image: channel.data?.data?.image,
+                        id: channelData?.id,
+                        name: channelData?.server ?? 'Unknown',
+                        image: channelData?.image,
                     };
                 })
                 .filter((server: DiskypeServer) => server.name !== 'Unknown')
                 .filter(
-                    (server: DiskypeServer, index, self) => index ===
-                        self.findIndex((serverObject) => serverObject.name == server.name)
+                    (server: DiskypeServer, index, self) =>
+                        index === self.findIndex((serverObject) => serverObject.name === server.name)
                 )
         );
+        
         const serverArray = Array.from(serverSet.values());
         setServerList(serverArray);
 
@@ -77,7 +80,7 @@ export default function ServerList(): JSX.Element {
             </Link>
             <CreateServerForm />
         </div>
-    )
+    );
 
     function checkIfUrl(path: string): Boolean {
         try {
