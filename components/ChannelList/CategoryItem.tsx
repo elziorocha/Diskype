@@ -27,7 +27,7 @@ export default function CategoryItem({
                     <div className={`${isOpen ? '' : '-rotate-90'} transition-all ease-in-out duration-200`}>
                         <ChevronDown/>
                     </div>
-                    <span className="inline-block uppercase text-sm font-bold px-2">{category}</span>
+                    <span className="inline-block font-bold px-2">{category}</span>
                 </button>
                 <Link href={`/?createChannel=true&serverName=${serverName}&category=${category}`}
                     className="inline-block create-button">

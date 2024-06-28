@@ -18,7 +18,8 @@ export default function CallLayout(): JSX.Element {
 
     return (
         <StreamTheme>
-            <h2 className='flex items-center justify-center py-3 w-full font-semibold text-gray-200'>
+            <h2 className='mb-1 flex items-center justify-center ml-auto mr-auto py-3 w-5/12 bg-zinc-900
+            text-gray-300 font-semibold rounded-b-full'>
                 Participants: {participantCount}
             </h2>
             <SpeakerLayout participantsBarPosition='bottom'/>

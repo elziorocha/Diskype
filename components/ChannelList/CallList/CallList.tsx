@@ -43,7 +43,8 @@ export default function CallList(): JSX.Element {
                     </div>
                     <h2 className="inline-block uppercase text-sm font-bold px-2">Voice Channels</h2>
                 </button>
-                <Link href={`/?createChannel=true&isVoice=true&category=Voice Channels`}>
+                <Link href={`/?createChannel=true&isVoice=true&category=Voice Channels`}
+                className="inline-block create-button">
                     <PlusIcon />
                 </Link>
             </div>
