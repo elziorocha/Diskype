@@ -75,7 +75,7 @@ export default function CreateServerForm(): JSX.Element {
                     </label>
                     <div className="flex items-center bg-gray-200 rounded-lg">
                         <span className="text-2xl py-2 pl-3 text-gray-600 font-bold">#</span>
-                        <input type="text" id="serverName" name="serverName" value={formData.serverName}
+                        <input type="text" id="serverName" name="serverName" value={formData.serverName} placeholder='server name'
                             onChange={(e) => setFormData({ ...formData, serverName: e.target.value })} required />
                     </div>
                 </div>
@@ -86,7 +86,7 @@ export default function CreateServerForm(): JSX.Element {
                     </label>
                     <div className="flex items-center bg-gray-200 rounded-lg">
                         <span className="text-2xl py-2 pl-3 text-gray-600 font-bold">#</span>
-                        <input type="text" id="serverImage" name="serverImage" value={formData.serverImage}
+                        <input type="text" id="serverImage" name="serverImage" value={formData.serverImage} placeholder='image URL'
                             onChange={(e) => setFormData({ ...formData, serverImage: e.target.value })} required />
                     </div>
                 </div>
