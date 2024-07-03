@@ -29,7 +29,7 @@ export default function CustomMessage(): JSX.Element {
                     </div>
                 )}
                 <div className='space-x-2'>
-                    <span className='font-semibold text-base text-gray-200'>{message.user?.name}</span>
+                    <span className='font-semibold text-base text-gray-200'>{message.user?.username}</span>
                     {message.updated_at && (
                         <span className='text-xs text-gray-300'>{formatDate(message.updated_at)}</span>
                     )}
